@@ -25,5 +25,5 @@ app.use('/api/v1/metricas-historicas', metricasRoutes);
 // Levantar el servidor
 const PORT = process.env.PORT || 8082;
 app.listen(PORT, () => {
-  console.log(`🚀 Servicio de Métricas (Node.js) corriendo en puerto ${PORT}`);
+  console.log(`Servicio de Métricas (Node.js) corriendo en puerto ${PORT}`);
 });
