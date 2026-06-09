@@ -1,0 +1,13 @@
+services:
+  api-metricas:
+    build: .
+    container_name: metricas-api
+    ports:
+      - "8082:8082"
+    env_file:
+      - .env
+    networks:
+      - metricas-network
+
+networks:
+  metricas-network:
