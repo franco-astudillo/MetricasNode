@@ -5,8 +5,8 @@ dotenv.config();
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false // Necesario si usas bases de datos en la nube como Neon, Supabase o Render
+  ssl: process.env.NODE_ENV === 'test' ? false : {
+    rejectUnauthorized: false 
   }
 });
 
