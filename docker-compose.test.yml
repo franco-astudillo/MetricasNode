@@ -1,0 +1,32 @@
+# docker-compose.test.yml
+
+services:
+  db-test:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+      POSTGRES_DB: metricas_test_db
+    ports:
+      - "5433:5432" 
+    restart: unless-stopped
+    # Agregamos un healthcheck para verificar si Postgres ya acepta conexiones
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_user -d metricas_test_db"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+
+  app-test:
+    build: 
+      context: .
+      dockerfile: Dockerfile.test
+    environment:
+      - DATABASE_URL=postgresql://test_user:test_password@db-test:5432/metricas_test_db
+      - GATEWAY_SECRET=local_test_back
+      - NODE_ENV=test
+    depends_on:
+      db-test:
+        # Condicionamos el inicio a que la base de datos pase el healthcheck
+        condition: service_healthy
+    command: npm test
